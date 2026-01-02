@@ -1,4 +1,4 @@
-using PhoneBook.Components;
+using PhoneBook.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
