@@ -8,14 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3e79ce4-8c8f-4d75-a434-f05d0361f9e9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/PhoneBook.Core/Abstractions/IPhoneNumberNormalizer.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhoneBook.Core/Models/PhoneNumber.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/PhoneBook.Infrastructure/Phone/LibPhoneNumberNormalizer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook.ConsoleApp/PhoneBook.ConsoleApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.ConsoleApp/PhoneBook.ConsoleApp.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook.Core/Class1.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook.Web/PhoneBook.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.Web/PhoneBook.Web.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook.sln" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.sln" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -137,7 +130,7 @@
       <workItem from="1767375210244" duration="8000" />
       <workItem from="1767375270016" duration="55000" />
       <workItem from="1767375350416" duration="1626000" />
-      <workItem from="1767538083858" duration="11170000" />
+      <workItem from="1767538083858" duration="13500000" />
     </task>
     <servers />
   </component>
