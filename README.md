@@ -1,3 +1,2 @@
 # OOP-Project
-Phone Contacts Management Application
-Gestionare contacte telefonice
+## PhoneBook // Phone Contacts Management Application // Gestionare contacte telefonice
