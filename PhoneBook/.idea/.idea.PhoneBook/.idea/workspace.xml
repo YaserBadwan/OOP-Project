@@ -8,29 +8,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3e79ce4-8c8f-4d75-a434-f05d0361f9e9" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/.gitignore" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhoneBook.Core/Abstractions/IPhoneNumberNormalizer.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhoneBook.Core/Models/PhoneNumber.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/PhoneBook.Infrastructure/Phone/LibPhoneNumberNormalizer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhoneBook.ConsoleApp/PhoneBook.ConsoleApp.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.ConsoleApp/PhoneBook.ConsoleApp.csproj" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhoneBook.Core/Class1.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PhoneBook.Web/PhoneBook.Web.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.Web/PhoneBook.Web.csproj" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PhoneBook.sln" beforeDir="false" afterPath="$PROJECT_DIR$/PhoneBook.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/App.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Layout/MainLayout.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Layout/MainLayout.razor.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Layout/NavMenu.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Layout/NavMenu.razor.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Pages/Counter.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Pages/Error.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Pages/Home.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Pages/Weather.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/Routes.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Components/_Imports.razor" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/PhoneBook.csproj" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Program.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/Properties/launchSettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/appsettings.Development.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/appsettings.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/wwwroot/app.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/wwwroot/bootstrap/bootstrap.min.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/wwwroot/bootstrap/bootstrap.min.css.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/PhoneBook/wwwroot/favicon.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/global.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +27,9 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/PhoneBook.ConsoleApp/Program.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Class1.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Abstractions/IPhoneNumberNormalizer.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Models/PhoneNumber.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PhoneBook.Infrastructure/Phone/LibPhoneNumberNormalizer.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -53,16 +40,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "git-widget-placeholder": "main",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected=".NET Project.PhoneBook.Core">
     <configuration name="PhoneBook.ConsoleApp" type="DotNetProject" factoryName=".NET Project">
       <option name="EXE_PATH" value="" />
@@ -148,7 +136,8 @@
       <updated>1767375208468</updated>
       <workItem from="1767375210244" duration="8000" />
       <workItem from="1767375270016" duration="55000" />
-      <workItem from="1767375350416" duration="716000" />
+      <workItem from="1767375350416" duration="1626000" />
+      <workItem from="1767538083858" duration="11170000" />
     </task>
     <servers />
   </component>
