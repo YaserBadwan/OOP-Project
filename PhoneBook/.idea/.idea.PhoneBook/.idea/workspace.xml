@@ -8,6 +8,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e3e79ce4-8c8f-4d75-a434-f05d0361f9e9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.PhoneBook/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -22,6 +23,7 @@
     <setting file="file://$PROJECT_DIR$/PhoneBook.ConsoleApp/Program.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Abstractions/IPhoneNumberNormalizer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Models/PhoneNumber.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/PhoneBook.Core/Models/Ringtone.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/PhoneBook.Infrastructure/Phone/LibPhoneNumberNormalizer.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
@@ -130,7 +132,7 @@
       <workItem from="1767375210244" duration="8000" />
       <workItem from="1767375270016" duration="55000" />
       <workItem from="1767375350416" duration="1626000" />
-      <workItem from="1767538083858" duration="13500000" />
+      <workItem from="1767538083858" duration="14194000" />
     </task>
     <servers />
   </component>
