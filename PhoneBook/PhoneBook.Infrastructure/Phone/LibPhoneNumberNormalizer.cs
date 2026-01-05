@@ -5,6 +5,8 @@ namespace PhoneBook.Infrastructure.Phone;
 
 public sealed class LibPhoneNumberNormalizer : IPhoneNumberNormalizer
 {
+    // PhoneNumberUtil este o clasa care contine metadata despre toate numerele de telefon
+    // este readonly, fiindca este FOARTE mare. Se declara o singura data in tot proiectul.
     private readonly PhoneNumberUtil _util = PhoneNumberUtil.GetInstance();
 
     public string ToE164(string raw, string defaultRegion)
