@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using PhoneBook.Core.Abstractions;
 using PhoneNumbers; // biblioteca pt normalizarea numerelor de telefon
 
@@ -12,13 +13,25 @@ public sealed class LibPhoneNumberNormalizer : IPhoneNumberNormalizer
     public string ToE164(string raw, string defaultRegion)
     {
         if (string.IsNullOrWhiteSpace(raw))
-            throw new ArgumentException("Phone number is required.", nameof(raw));
+            throw new ValidationException("Phone number is required.");
 
-        var parsed = _util.Parse(raw, defaultRegion);
+        try
+        {
+            var parsed = _util.Parse(raw, defaultRegion);
 
-        if (!_util.IsValidNumber(parsed))
-            throw new ArgumentException("Phone number is invalid.", nameof(raw));
+            if (!_util.IsValidNumber(parsed))
+                throw new ValidationException("Phone number is invalid.");
 
-        return _util.Format(parsed, PhoneNumberFormat.E164);
+            return _util.Format(parsed, PhoneNumberFormat.E164);
+        }
+        catch (ValidationException)
+        {
+            throw;
+        }
+        catch (Exception ex)
+        {
+            throw new ValidationException("Phone number is invalid.", ex);
+        }
+
     }
 }

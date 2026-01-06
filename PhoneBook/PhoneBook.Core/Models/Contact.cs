@@ -60,7 +60,7 @@ public sealed class Contact
         Validate();
     }
 
-    // Ca sa permitem user-ului sa dea "Cancel edit".
+    // Ca sa permitem user-ului sa dea "Cancel edit". Practic, user-ul editeaza un Draft.
     public Contact Clone() =>
         new(
             phoneNumber: PhoneNumber,
