@@ -56,3 +56,4 @@ nunit-*.xml
 #JetBrains IDE
 .idea/
 .DS_Store
+*.DotSettings.user
