@@ -2,7 +2,7 @@ using System.Text;
 
 namespace PhoneBook.Core.Models;
 
-public sealed class PhoneNumber : IEquatable<PhoneNumber>
+public sealed partial class PhoneNumber : IEquatable<PhoneNumber>
 {
     public string Raw { get; }
     public string E164 { get; }
