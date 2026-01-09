@@ -15,7 +15,7 @@ public sealed class Contact
     public string? Notes { get; private set; }
 
     private static readonly Regex EmailRegex =
-        new(@"^[^@\s]+[^@\s@]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        new(@"^[^@\s]+@[^@\s]+\.[^@\s]+$", RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
     public Contact(PhoneNumber phoneNumber, 
         string? firstName, 
