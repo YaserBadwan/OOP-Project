@@ -59,6 +59,25 @@ public sealed class Contact
 
         Validate();
     }
+    
+    public Contact WithPhoneNumber(PhoneNumber newPhoneNumber)
+    {
+        if (newPhoneNumber is null)
+        {
+            throw new ValidationException(nameof(newPhoneNumber));
+        }
+
+        return new Contact(
+            phoneNumber: newPhoneNumber,
+            firstName: FirstName,
+            lastName: LastName,
+            email: Email,
+            pronouns: Pronouns,
+            ringtone: Ringtone,
+            birthday: Birthday,
+            notes: Notes
+        );
+    }
 
     // Ca sa permitem user-ului sa dea "Cancel edit". Practic, user-ul editeaza un Draft.
     public Contact Clone() =>

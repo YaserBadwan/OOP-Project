@@ -101,12 +101,10 @@ public sealed class PhoneBookService
             throw new ContactNotFoundException($"Contact not found for phone: {originalE164}");
         }
         
-        // Daca user-ul a schimbat numarul, verificam unicitatea, excluzand contactul curent
         EnsureUniquePhoneOrThrow(updated.PhoneNumber.E164, exceptE164: originalE164);
 
         var warnings = BuildDuplicateNameWarnings(updated, exceptE164: originalE164);
         
-        // Replace snapshot (simplu si predictibil)
         _state.Contacts[index] = updated;
         Persist();
         
@@ -114,7 +112,6 @@ public sealed class PhoneBookService
     }
     
     // SEARCH cu exact match, case-insensitive, OR
-    // Daca sunt multiple rezultate, UI le afiseaza si user alege
     public IReadOnlyList<Contact> SearchExact(string? query)
     {
         query = (query ?? string.Empty).Trim();
@@ -131,7 +128,8 @@ public sealed class PhoneBookService
                 EqualsCi(c.FirstName, query) ||
                 (c.LastName is not null && EqualsCi(c.LastName, query)) ||
                 EqualsCi(c.PhoneNumber.Raw, query) ||
-                (queryE164 is not null && c.PhoneNumber.E164 == queryE164))
+                (queryE164 is not null && c.PhoneNumber.E164 == queryE164) ||
+               (GetFullName(c) is not null && EqualsCi(GetFullName(c)!, query)))
             .OrderBy(c => c.FirstName)
             .ThenBy(c => c.LastName)
             .ThenBy(c => c.PhoneNumber.E164)
@@ -199,13 +197,13 @@ public sealed class PhoneBookService
             phone = (phone ?? string.Empty).Trim();
             if (phone.Length == 0)
             {
-                throw new ValidationException("Phone Number is required!");
+                throw new ValidationException("Phone number is required!");
             }
             
             var e164 = TryNormalizeToE164OrNull(phone);
             if (e164 is null)
             {
-                throw new ValidationException("Phone Number is not valid!");
+                throw new ValidationException("Phone number is not valid!");
             }
 
             return e164;
@@ -228,4 +226,11 @@ public sealed class PhoneBookService
                 return null;
             }
         }
+        
+        public PhoneNumber CreatePhoneNumber(string raw) 
+            => PhoneNumber.Create(raw, _phoneNumberNormalizer, DefaultRegion);
+        
+        private static string? GetFullName(Contact c)
+            => c.LastName is null ? null : $"{c.FirstName} {c.LastName}";
+    
 }
