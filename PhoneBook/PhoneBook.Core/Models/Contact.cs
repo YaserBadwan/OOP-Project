@@ -49,15 +49,21 @@ public sealed class Contact
         DateOnly? birthday,
         string? notes)
     {
-        FirstName = NormalizeRequired(firstName, "First name is required.");
-        LastName = NormalizeOptional(lastName);
-        Email = NormalizeOptional(email);
-        Pronouns = NormalizeOptional(pronouns);
+        var newFirstName = NormalizeRequired(firstName, "First name is required.");
+        var newLastName = NormalizeOptional(lastName);
+        var newEmail = NormalizeOptional(email);
+        var newPronouns = NormalizeOptional(pronouns);
+        var newNotes = NormalizeOptional(notes);
+        
+        ValidateDraft(newFirstName, newEmail, birthday);
+        
+        FirstName = newFirstName;
+        LastName = newLastName;
+        Email = newEmail;
+        Pronouns = newPronouns;
         Ringtone = ringtone;
         Birthday = birthday;
-        Notes = NormalizeOptional(notes);
-
-        Validate();
+        Notes = newNotes;
     }
     
     public Contact WithPhoneNumber(PhoneNumber newPhoneNumber)
@@ -91,22 +97,21 @@ public sealed class Contact
             birthday: Birthday,
             notes: Notes);
 
+    private static void ValidateDraft(string firstName, string? email, DateOnly? birthday)
+    {
+        if (firstName.Length == 0)
+            throw new ValidationException("First name is required!");
+
+        if (email is not null && !EmailRegex.IsMatch(email))
+            throw new ValidationException("Email is invalid!");
+
+        if (birthday is not null && birthday.Value > DateOnly.FromDateTime(DateTime.Today))
+            throw new ValidationException("Birthday cannot be in the future!");
+    }
+    
     private void Validate()
     {
-        if (FirstName.Length == 0)
-        {
-            throw new ValidationException("First name is required!");
-        }
-
-        if (Email is not null && !EmailRegex.IsMatch(Email))
-        {
-            throw new ValidationException("Email is invalid!");
-        }
-
-        if (Birthday is not null && Birthday.Value > DateOnly.FromDateTime(DateTime.Today))
-        {
-            throw new ValidationException("Birthday cannot be in the future!");
-        }
+        ValidateDraft(FirstName, Email, Birthday);
     }
 
     private static string NormalizeRequired(string? value, string errorMessage)
@@ -120,7 +125,7 @@ public sealed class Contact
         return normalized;
     }
 
-    private static string NormalizeOptional(string? value)
+    private static string? NormalizeOptional(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {

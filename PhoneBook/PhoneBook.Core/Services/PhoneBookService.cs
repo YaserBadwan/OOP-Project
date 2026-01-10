@@ -136,6 +136,12 @@ public sealed class PhoneBookService
             .ToList();
     }
     
+    public PhoneNumber CreatePhoneNumber(string raw) 
+        => PhoneNumber.Create(raw, _phoneNumberNormalizer, DefaultRegion);
+        
+    private static string? GetFullName(Contact c)
+        => c.LastName is null ? null : $"{c.FirstName} {c.LastName}";
+    
     // HELPERS
     private void Persist()
     {
@@ -226,11 +232,4 @@ public sealed class PhoneBookService
                 return null;
             }
         }
-        
-        public PhoneNumber CreatePhoneNumber(string raw) 
-            => PhoneNumber.Create(raw, _phoneNumberNormalizer, DefaultRegion);
-        
-        private static string? GetFullName(Contact c)
-            => c.LastName is null ? null : $"{c.FirstName} {c.LastName}";
-    
 }
