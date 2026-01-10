@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using PhoneBook.ConsoleApp.Abstractions;
 using PhoneBook.Core.Exceptions;
 
@@ -5,11 +6,13 @@ namespace PhoneBook.ConsoleApp.CLI;
 
 public sealed class CommandLoop : ICommandLoop
 {
+    private readonly ILogger<CommandLoop> _logger;
     private readonly IConsole _console;
     private readonly ICommandDispatcher _dispatcher;
     
-    public CommandLoop(IConsole console, ICommandDispatcher dispatcher)
+    public CommandLoop(ILogger<CommandLoop> logger, IConsole console, ICommandDispatcher dispatcher)
     {
+        _logger = logger;
         _console = console;
         _dispatcher = dispatcher;
     }
@@ -44,10 +47,27 @@ public sealed class CommandLoop : ICommandLoop
             catch (DomainException ex)
             {
                 _console.WriteError("✗ " + ex.Message);
+                if (ex.InnerException is not null)
+                {
+                    _logger.LogWarning(
+                        ex.InnerException,
+                        "Domain exception occurred: {Message}",
+                        ex.Message);
+                }
+                else
+                {
+                    _logger.LogWarning(
+                        ex,
+                        "Domain exception occurred without inner exception: {Message}",
+                        ex.Message);
+                }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 _console.WriteError("✗ Unexpected error. Please try again.");
+                _logger.LogError(
+                    ex,
+                    "Unhandled non-domain exception in CommandLoop");
             }
         }
     }
