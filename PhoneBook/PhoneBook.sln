@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBook.Testing", "PhoneB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneBook.Core.Tests", "PhoneBook.Core.Tests\PhoneBook.Core.Tests.csproj", "{3A09BC74-5F8E-4EFB-9F82-F076512047FE}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{71BD1C75-D832-4537-9CDF-CE5248048CE9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{3A09BC74-5F8E-4EFB-9F82-F076512047FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3A09BC74-5F8E-4EFB-9F82-F076512047FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3A09BC74-5F8E-4EFB-9F82-F076512047FE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3A09BC74-5F8E-4EFB-9F82-F076512047FE} = {71BD1C75-D832-4537-9CDF-CE5248048CE9}
+		{B01F4119-369E-4121-99CE-555EEAE265E8} = {71BD1C75-D832-4537-9CDF-CE5248048CE9}
 	EndGlobalSection
 EndGlobal

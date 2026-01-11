@@ -9,7 +9,7 @@ public sealed class ContactBuilder
     private string? _lastName;
     private string? _email;
     private string? _pronouns;
-    private Ringtone _ringtone = Ringtone.Default; // ✅ implicit
+    private Ringtone _ringtone = Ringtone.Default;
     private DateOnly? _birthday;
     private string? _notes;
 
@@ -74,7 +74,7 @@ public sealed class ContactBuilder
             lastName: _lastName,
             email: _email,
             pronouns: _pronouns,
-            ringtone: _ringtone,   // ✅ enum, niciodată null
+            ringtone: _ringtone,
             birthday: _birthday,
             notes: _notes
         );

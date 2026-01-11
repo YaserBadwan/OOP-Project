@@ -1,0 +1,16 @@
+{
+  "profiles": {
+    "PhoneBook.ConsoleApp (Json)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PhoneBook__Storage__Provider": "Json"
+      }
+    },
+    "PhoneBook.ConsoleApp (InMemory)": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PhoneBook__Storage__Provider": "InMemory"
+      }
+    }
+  }
+}

@@ -23,15 +23,23 @@ public sealed class EditCommand : ICommand
             "Edit contact",
             "Enter = keep current | '-' = clear optional field | 'cancel' = abort edit anytime");
 
-        edited.UpdateDetails(
-            firstName: ReadEditRequired(context, "First name", edited.FirstName),
-            lastName: ReadEditOptional(context, "Last name", edited.LastName),
-            email: ReadEditOptional(context, "Email", edited.Email),
-            pronouns: ReadEditOptional(context, "Pronouns", edited.Pronouns),
-            ringtone: ChooseRingtone(context, edited.Ringtone),
-            birthday: ReadDateEdit(context, "Birthday (yyyy-mm-dd)", edited.Birthday),
-            notes: ReadEditOptional(context, "Notes", edited.Notes)
-        );
+        try
+        {
+            edited.UpdateDetails(
+                firstName: ReadEditRequired(context, "First name", edited.FirstName),
+                lastName: ReadEditOptional(context, "Last name", edited.LastName),
+                email: ReadEditOptional(context, "Email", edited.Email),
+                pronouns: ReadEditOptional(context, "Pronouns", edited.Pronouns),
+                ringtone: ChooseRingtone(context, edited.Ringtone),
+                birthday: ReadDateEdit(context, "Birthday (yyyy-mm-dd)", edited.Birthday),
+                notes: ReadEditOptional(context, "Notes", edited.Notes)
+            );
+        }
+        catch (DomainException ex)
+        {
+            context.Console.WriteError("✗ " + ex.Message);
+            context.Console.WriteWarning("Please try again.\n");
+        }
         
         context.Console.Write("Change phone number? (y/n): ");
         var changePhone = context.Console.ReadLine();
@@ -81,9 +89,32 @@ public sealed class EditCommand : ICommand
         }
     }
 
-    private static string? ReadEditRequired(CommandContext context, string label, string current)
+    private static string ReadEditRequired(CommandContext context, string label, string current)
     {
-        context.Console.Write($"{label} [{current}]: ");
+        while (true)
+        {
+            context.Console.Write($"{label} [{current}]: ");
+            var input = context.Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return current;
+            }
+
+            if (input == "-")
+            {
+                context.Console.WriteError("! This field is required and cannot be cleared.");
+                continue;
+            }
+
+            return input;
+        }
+    }
+
+
+    private static string? ReadEditOptional(CommandContext context, string label, string? current)
+    {
+        context.Console.Write($"{label} [{current ?? "-"}]: ");
         var input = context.Console.ReadLine()?.Trim();
 
         if (string.IsNullOrWhiteSpace(input))
@@ -96,15 +127,9 @@ public sealed class EditCommand : ICommand
             return null;
         }
 
-        return input;  
+        return input;
     }
 
-    private static string? ReadEditOptional(CommandContext context, string label, string? current)
-    {
-        context.Console.Write($"{label} [{current ?? "-"}]: ");
-        var input = context.Console.ReadLine()?.Trim();
-        return string.IsNullOrWhiteSpace(input) ? current : input;
-    }
 
     private static DateOnly? ReadDateEdit(CommandContext context, string label, DateOnly? current)
     {
@@ -184,7 +209,7 @@ public sealed class EditCommand : ICommand
                 context.Console.WriteLine($"New phone accepted: {newPhone.E164}");
                 return edited.WithPhoneNumber(newPhone);
             }
-            catch (DomainException ex)
+            catch (DomainException)
             {
                 context.Console.WriteError("Invalid phone number. Try again.");
             }

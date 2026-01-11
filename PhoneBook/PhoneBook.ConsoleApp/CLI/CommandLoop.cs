@@ -19,7 +19,8 @@ public sealed class CommandLoop : ICommandLoop
 
     public void Run()
     {
-
+        _logger.LogInformation("CommandLoop started.");
+        
         while (true)
         {
             _console.Write("PhoneBook> ");
