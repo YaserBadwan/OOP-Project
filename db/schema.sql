@@ -1,0 +1,18 @@
+CREATE DATABASE IF NOT EXISTS phonebook;
+USE phonebook;
+
+CREATE TABLE IF NOT EXISTS contacts (
+  PhoneE164 VARCHAR(32) NOT NULL,
+  PhoneRaw VARCHAR(64) NOT NULL,
+  FirstName VARCHAR(100) NOT NULL,
+  LastName VARCHAR(100) NULL,
+  Email VARCHAR(200) NULL,
+  Pronouns VARCHAR(100) NULL,
+  Ringtone VARCHAR(50) NULL,
+  Birthday DATE NULL,
+  Notes TEXT NULL,
+  CreatedAtUtc DATETIME NOT NULL,
+  UpdatedAtUtc DATETIME NOT NULL,
+  PRIMARY KEY (PhoneE164)
+);
+

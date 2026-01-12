@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PhoneBook.ConsoleApp.Abstractions;
@@ -13,11 +14,13 @@ using PhoneBook.Core.Services;
 using PhoneBook.Core.Storage;
 using PhoneBook.Infrastructure.InMemory;
 using PhoneBook.Infrastructure.JsonStorage;
+using PhoneBook.Infrastructure.MariaDbStorage;
 using PhoneBook.Infrastructure.Phone;
 
 // TERMINAL COMMANDS FOR STORAGE CHOICE
 // dotnet run --project PhoneBook.ConsoleApp --launch-profile Json
 // dotnet run --project PhoneBook.ConsoleApp --launch-profile InMemory
+// dotnet run --project PhoneBook.ConsoleApp --launch-profile MariaDb
 
 var host = Host.CreateDefaultBuilder(args)
     .ConfigureLogging((context, logging) =>
@@ -35,6 +38,16 @@ var host = Host.CreateDefaultBuilder(args)
 
         logging.AddDebug();
     })
+    
+    .ConfigureAppConfiguration((context, config) =>
+    {
+        config.SetBasePath(AppContext.BaseDirectory);
+
+        config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+        config.AddEnvironmentVariables();
+    })
+    
     .ConfigureServices((context, services) =>
     {
         // ========= UI =========
@@ -48,21 +61,29 @@ var host = Host.CreateDefaultBuilder(args)
 
         // ========= Infrastructure =========
         services.AddSingleton<IPhoneNumberNormalizer, LibPhoneNumberNormalizer>();
+        
+        services.Configure<MariaDbStorageOptions>(
+            context.Configuration.GetSection("PhoneBook:Storage:MariaDb"));
+        
+        var provider =
+            Environment.GetEnvironmentVariable("PhoneBook__Storage__Provider")
+            ?? context.Configuration["PhoneBook:Storage:Provider"]
+            ?? "Json";
 
-        var provider = context.Configuration["PhoneBook:Storage:Provider"] ?? "Json";
-
-        var configuredPath = context.Configuration["PhoneBook:Storage:Path"]; 
+        var configuredPath = context.Configuration["PhoneBook:Storage:Path"];
         var jsonPath = string.IsNullOrWhiteSpace(configuredPath)
             ? AppPaths.ResolveDataFile("phonebook.json")
             : (Path.IsPathRooted(configuredPath)
                 ? configuredPath
                 : AppPaths.ResolveDataFile(configuredPath));
 
-        services.AddSingleton(new StorageInfo(provider, jsonPath));
-
         if (string.Equals(provider, "InMemory", StringComparison.OrdinalIgnoreCase))
         {
             services.AddSingleton<IPhoneBookStateStorage, InMemoryPhoneBookStateStorage>();
+        }
+        else if (string.Equals(provider, "MariaDb", StringComparison.OrdinalIgnoreCase))
+        {
+            services.AddSingleton<IPhoneBookStateStorage, MariaDbPhoneBookStateStorage>();
         }
         else
         {
@@ -77,6 +98,26 @@ var host = Host.CreateDefaultBuilder(args)
             services.AddSingleton<IPhoneBookStateStorage, JsonFilePhoneBookStateStorage>();
         }
 
+        services.AddSingleton(sp =>
+        {
+            var storage = sp.GetRequiredService<IPhoneBookStateStorage>();
+
+            return storage switch
+            {
+                InMemoryPhoneBookStateStorage =>
+                    new StorageInfo("InMemory", "no persistence"),
+
+                JsonFilePhoneBookStateStorage =>
+                    new StorageInfo("Json", jsonPath),
+
+                MariaDbPhoneBookStateStorage =>
+                    new StorageInfo("MariaDb", "localhost:3307/phonebook"),
+
+                _ =>
+                    new StorageInfo(storage.GetType().Name, "Unknown")
+            };
+        });
+        
         // ========= CLI =========
         services.AddSingleton<CommandContext>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();

@@ -11,9 +11,7 @@ public sealed class EditCommand : ICommand
 
     public void Execute(CommandContext context, string[] args)
     {
-        var phone = args.Length >= 1
-            ? args[0]
-            : ReadRequired(context, "Phone to edit: ");
+        var phone = args.Length >= 1 ? args[0] : ReadRequired(context, "Phone to edit: ");
 
         var original = context.Service.GetByPhone(phone);
         var edited = original.Clone();

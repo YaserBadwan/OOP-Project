@@ -11,6 +11,13 @@
       "environmentVariables": {
         "PhoneBook__Storage__Provider": "InMemory"
       }
+    },
+    "MariaDb": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "PhoneBook__Storage__Provider": "MariaDb",
+        "DOTNET_ENVIRONMENT": "Development"
+      }
     }
   }
 }

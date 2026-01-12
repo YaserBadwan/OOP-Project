@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\PhoneBook.Core\PhoneBook.Core.csproj" />
+      <ProjectReference Include="..\..\PhoneBook.Core\PhoneBook.Core.csproj" />
     </ItemGroup>
 
 </Project>

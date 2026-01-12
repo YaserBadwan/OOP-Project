@@ -29,14 +29,7 @@ public sealed class ConsolePhoneBookApp
     {
         try
         {
-            if (string.Equals(_storageInfo.Provider, "InMemory", StringComparison.OrdinalIgnoreCase))
-            {
-                _console.WriteSuccess("Storage: InMemory (no persistence)");
-            }
-            else
-            {
-                _console.WriteSuccess($"Storage: Json ({_storageInfo.Path ?? "phonebook.json"})");
-            }
+            _console.WriteSuccess(_storageInfo.ToDisplayString());
 
             ConsoleLayout.PrintTitle(_console, "PhoneBook CLI", "Type 'help' to see available commands.");
             _loop.Run();

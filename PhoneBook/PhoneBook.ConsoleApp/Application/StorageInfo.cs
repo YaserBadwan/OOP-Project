@@ -3,11 +3,13 @@ namespace PhoneBook.ConsoleApp.Infrastructure;
 public sealed class StorageInfo
 {
     public string Provider { get; }
-    public string? Path { get; }
+    public string? Details { get; }
 
-    public StorageInfo(string provider, string? path)
+    public StorageInfo(string provider, string? details)
     {
         Provider = provider;
-        Path = path;
+        Details = details;
     }
+    
+    public string ToDisplayString() => $"Storage: {Provider} ({Details})";
 }
