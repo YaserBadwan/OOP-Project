@@ -45,6 +45,10 @@ public sealed class CommandLoop : ICommandLoop
                     return;
                 }
             }
+            catch (CommandAbortedException)
+            {
+                _console.WriteWarning("! Cancelled.");
+            }
             catch (DomainException ex)
             {
                 _console.WriteError("✗ " + ex.Message);

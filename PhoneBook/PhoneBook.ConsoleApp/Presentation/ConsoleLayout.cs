@@ -14,6 +14,7 @@ public class ConsoleLayout
             c.WriteLine(subtitle);
 
         c.WriteLine("");
+        
     }
 
     public static void PrintSection(IConsole c, string title)

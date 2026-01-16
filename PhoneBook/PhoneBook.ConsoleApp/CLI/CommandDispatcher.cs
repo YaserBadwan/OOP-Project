@@ -25,7 +25,7 @@ public class CommandDispatcher : ICommandDispatcher
 
         var verb = tokens[0];
         var args = tokens.Skip(1).ToArray();
-
+        
         if (verb.Equals("exit", StringComparison.OrdinalIgnoreCase) ||
             verb.Equals("quit", StringComparison.OrdinalIgnoreCase))
         {

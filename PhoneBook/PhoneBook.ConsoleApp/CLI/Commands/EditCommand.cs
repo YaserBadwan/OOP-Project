@@ -1,9 +1,8 @@
-using PhoneBook.ConsoleApp.CLI;
 using PhoneBook.ConsoleApp.Presentation;
 using PhoneBook.Core.Exceptions;
 using PhoneBook.Core.Models;
 
-namespace PhoneBook.ConsoleApp.Cli.Commands;
+namespace PhoneBook.ConsoleApp.CLI.Commands;
 
 public sealed class EditCommand : ICommand
 {
@@ -11,211 +10,87 @@ public sealed class EditCommand : ICommand
 
     public void Execute(CommandContext context, string[] args)
     {
-        var phone = args.Length >= 1 ? args[0] : ReadRequired(context, "Phone to edit: ");
+        var console = context.Console;
+        var prompt = context.Prompt;
+
+        var phone = args.Length >= 1
+            ? args[0]
+            : prompt.Required("Phone to edit: ");
 
         var original = context.Service.GetByPhone(phone);
         var edited = original.Clone();
 
         ConsoleLayout.PrintTitle(
-            context.Console,
+            console,
             "Edit contact",
-            "Enter = keep current | '-' = clear optional field | 'cancel' = abort edit anytime");
+            "Enter = keep current | '-' = clear optional field | 'cancel' = abort edit anytime"
+        );
 
         try
         {
             edited.UpdateDetails(
-                firstName: ReadEditRequired(context, "First name", edited.FirstName),
-                lastName: ReadEditOptional(context, "Last name", edited.LastName),
-                email: ReadEditOptional(context, "Email", edited.Email),
-                pronouns: ReadEditOptional(context, "Pronouns", edited.Pronouns),
-                ringtone: ChooseRingtone(context, edited.Ringtone),
-                birthday: ReadDateEdit(context, "Birthday (yyyy-mm-dd)", edited.Birthday),
-                notes: ReadEditOptional(context, "Notes", edited.Notes)
+                firstName: prompt.EditRequired("First name", edited.FirstName),
+                lastName: prompt.EditOptional("Last name", edited.LastName),
+                email: prompt.EditEmail("Email", edited.Email),
+                pronouns: prompt.EditOptional("Pronouns", edited.Pronouns),
+                ringtone: prompt.ChooseEnum("Choose ringtone:", edited.Ringtone),
+                birthday: prompt.EditDate("Birthday", edited.Birthday, "yyyy-MM-dd"),
+                notes: prompt.EditOptional("Notes", edited.Notes)
             );
         }
         catch (DomainException ex)
         {
-            context.Console.WriteError("✗ " + ex.Message);
-            context.Console.WriteWarning("Please try again.\n");
-        }
-        
-        context.Console.Write("Change phone number? (y/n): ");
-        var changePhone = context.Console.ReadLine();
-
-        if (IsYes(changePhone))
-        {
-            edited = TryChangePhone(context, edited);
-        }
-
-        context.Console.Write("Save changes? (y/n): ");
-        var confirm = context.Console.ReadLine();
-
-        if (!IsYes(confirm))
-        {
-            context.Console.WriteWarning("! Edit cancelled.");
+            console.WriteError("✗ " + ex.Message);
+            console.WriteWarning("Please try again.\n");
             return;
         }
 
-        var (updated, warnings) = context.Service.Update(
+        if (prompt.Confirm("Change phone number?"))
+        {
+            edited = ChangePhone(context, edited);
+        }
+
+        if (!prompt.Confirm("Save changes?"))
+        {
+            console.WriteWarning("! Edit cancelled.");
+            return;
+        }
+
+        var (_, warnings) = context.Service.Update(
             originalPhone: original.PhoneNumber.E164,
             updated: edited
         );
-        context.Console.WriteSuccess("✓ Contact updated.");
-        
+
+        console.WriteSuccess("✓ Contact updated.");
+
         if (warnings.Count > 0)
         {
-            context.Console.WriteLine("");
-            context.Console.WriteWarning("! Warnings:");
+            console.WriteLine("");
+            console.WriteWarning("! Warnings:");
             foreach (var w in warnings)
-                context.Console.WriteWarning("  - " + w.Message);
-        }
-    }
-    
-    private static string ReadRequired(CommandContext context, string label)
-    {
-        while (true)
-        {
-            context.Console.Write(label);
-            var input = context.Console.ReadLine()?.Trim();
-
-            if (!string.IsNullOrWhiteSpace(input))
-            {
-                return input;
-            }
-
-            context.Console.WriteError("! This field is required.");
+                console.WriteWarning("  - " + w.Message);
         }
     }
 
-    private static string ReadEditRequired(CommandContext context, string label, string current)
+    private static Contact ChangePhone(CommandContext context, Contact edited)
     {
-        while (true)
-        {
-            context.Console.Write($"{label} [{current}]: ");
-            var input = context.Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return current;
-            }
-
-            if (input == "-")
-            {
-                context.Console.WriteError("! This field is required and cannot be cleared.");
-                continue;
-            }
-
-            return input;
-        }
-    }
-
-
-    private static string? ReadEditOptional(CommandContext context, string label, string? current)
-    {
-        context.Console.Write($"{label} [{current ?? "-"}]: ");
-        var input = context.Console.ReadLine()?.Trim();
-
-        if (string.IsNullOrWhiteSpace(input))
-        {
-            return current;
-        }
-
-        if (input == "-")
-        {
-            return null;
-        }
-
-        return input;
-    }
-
-
-    private static DateOnly? ReadDateEdit(CommandContext context, string label, DateOnly? current)
-    {
-        while (true)
-        {
-            context.Console.Write($"{label} [{current?.ToString() ?? "-"}]: ");
-            var input = context.Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return current;
-            }
-
-            if (input == "-")
-            {
-                return null;
-            }
-
-            if (DateOnly.TryParseExact(input, "yyyy-MM-dd", out var d))
-            {
-                return d;
-            }
-
-            context.Console.WriteError("! Invalid date format.");
-        }
-    }
-
-    private static Ringtone ChooseRingtone(CommandContext context, Ringtone current)
-    {
-        var values = Enum.GetValues<Ringtone>();
-
-        context.Console.WriteLine("Choose ringtone:");
-        for (int i = 0; i < values.Length; i++)
-            context.Console.WriteLine($"  {i + 1}) {values[i]}");
+        var prompt = context.Prompt;
+        var console = context.Console;
 
         while (true)
         {
-            context.Console.Write($"Selection (Enter = {current}): ");
-            var input = context.Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrWhiteSpace(input))
-            {
-                return current;
-            }
-
-            if (int.TryParse(input, out var idx) && idx >= 1 && idx <= values.Length)
-            {
-                return values[idx - 1];
-            }
-
-            context.Console.WriteError("! Invalid selection. Please try again.");
-        }
-    }
-    
-    private static Contact TryChangePhone(CommandContext context, Contact edited)
-    {
-        while (true)
-        {
-            context.Console.Write("New phone (or type 'cancel'): ");
-            var raw = context.Console.ReadLine()?.Trim();
-
-            if (string.IsNullOrWhiteSpace(raw))
-            {
-                context.Console.WriteWarning("Phone is required (or type 'cancel').");
-                continue;
-            }
-
-            if (raw.Equals("cancel", StringComparison.OrdinalIgnoreCase))
-            {
-                context.Console.WriteSuccess("Phone change cancelled.");
-                return edited;
-            }
+            var raw = prompt.Required("New phone: ");
 
             try
             {
                 var newPhone = context.Service.CreatePhoneNumber(raw);
-                context.Console.WriteLine($"New phone accepted: {newPhone.E164}");
+                console.WriteLine($"New phone accepted: {newPhone.E164}");
                 return edited.WithPhoneNumber(newPhone);
             }
-            catch (DomainException)
+            catch (DomainException ex)
             {
-                context.Console.WriteError("Invalid phone number. Try again.");
+                console.WriteError("! Invalid phone: " + ex.Message);
             }
         }
     }
-
-    private static bool IsYes(string? input)
-        => input != null &&
-           (input.Equals("y", StringComparison.OrdinalIgnoreCase)
-            || input.Equals("yes", StringComparison.OrdinalIgnoreCase));
 }

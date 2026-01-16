@@ -40,6 +40,7 @@ public sealed class Contact
         Validate();
     }
 
+    // Updateaza (editeaza) detaliile unui contact existent. Nu editeaza numarul de telefon
     public void UpdateDetails(
         string? firstName,
         string? lastName,
@@ -66,6 +67,7 @@ public sealed class Contact
         Notes = newNotes;
     }
     
+    // Editeaza numarul de telefon al unui contact existent
     public Contact WithPhoneNumber(PhoneNumber newPhoneNumber)
     {
         if (newPhoneNumber is null)
@@ -97,6 +99,8 @@ public sealed class Contact
             birthday: Birthday,
             notes: Notes);
 
+    
+    // Validare generala pentru prenume, email si data de nastere
     private static void ValidateDraft(string firstName, string? email, DateOnly? birthday)
     {
         if (firstName.Length == 0)
@@ -109,11 +113,15 @@ public sealed class Contact
             throw new ValidationException("Birthday cannot be in the future!");
     }
     
+    
+    // Validare facuta SPECIAL pentru constructor
     private void Validate()
     {
         ValidateDraft(FirstName, Email, Birthday);
     }
 
+    
+    // Daca e NULL, arunca o exceptie
     private static string NormalizeRequired(string? value, string errorMessage)
     {
         var normalized = NormalizeOptional(value);
@@ -124,7 +132,8 @@ public sealed class Contact
         
         return normalized;
     }
-
+    
+    // Poate returna NULL
     private static string? NormalizeOptional(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))

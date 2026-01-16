@@ -18,7 +18,7 @@ using PhoneBook.Infrastructure.MariaDbStorage;
 using PhoneBook.Infrastructure.Phone;
 
 // TERMINAL COMMANDS FOR STORAGE CHOICE
-// dotnet run --project PhoneBook.ConsoleApp --launch-profile Json
+// dotnet run --project PhoneBook.ConsoleApp --launch-profile Json //-> care oricum e default
 // dotnet run --project PhoneBook.ConsoleApp --launch-profile InMemory
 // dotnet run --project PhoneBook.ConsoleApp --launch-profile MariaDb
 
@@ -46,20 +46,22 @@ var host = Host.CreateDefaultBuilder(args)
         config.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         config.AddJsonFile($"appsettings.{context.HostingEnvironment.EnvironmentName}.json", optional: true, reloadOnChange: true);
         config.AddEnvironmentVariables();
+
     })
     
     .ConfigureServices((context, services) =>
     {
-        // ========= UI =========
+        // UI
         services.AddSingleton<IConsole, SystemConsole>();
         services.AddSingleton<IContactPresenter, ConsoleContactPresenter>();
+        services.AddSingleton<IPrompt, Prompt>();
         services.AddSingleton<ConsoleLayout>();
         services.AddSingleton<ConsolePhoneBookApp>();
 
-        // ========= Core =========
+        // Core
         services.AddSingleton<PhoneBookService>();
 
-        // ========= Infrastructure =========
+        // Infrastructure
         services.AddSingleton<IPhoneNumberNormalizer, LibPhoneNumberNormalizer>();
         
         services.Configure<MariaDbStorageOptions>(
@@ -118,7 +120,7 @@ var host = Host.CreateDefaultBuilder(args)
             };
         });
         
-        // ========= CLI =========
+        // CLI
         services.AddSingleton<CommandContext>();
         services.AddSingleton<ICommandDispatcher, CommandDispatcher>();
         services.AddSingleton<ICommandLoop, CommandLoop>();
